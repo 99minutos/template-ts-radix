@@ -1,6 +1,7 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { PropsWithChildren, useEffect } from 'react';
 
+import { LoadingPage } from './loading';
 import { Auth0WithoutPermission } from './restricted';
 
 // redirect to login page if not authenticated
@@ -18,7 +19,7 @@ export const AuthRequired = (props: PropsWithChildren) => {
   }, [isAuthenticated, error, isLoading, loginWithRedirect]);
 
   if (isLoading) {
-    return <> Loading... </>;
+    return <LoadingPage />;
   }
 
   if (error) {

@@ -1,4 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import { DropdownMenu } from '@radix-ui/themes';
 import classnames from 'classnames';
 import { BoxIcon, ChartBarIcon, CogIcon, HomeIcon, MenuIcon } from 'lucide-react';
 import { Avatar } from 'radix-ui';
@@ -14,7 +15,7 @@ interface SidebarItem {
 }
 
 export function DashboardLayout(props: PropsWithChildren) {
-  const { user } = useAuth0();
+  const { user, logout } = useAuth0();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Example navigation items - replace with your actual items
@@ -41,38 +42,40 @@ export function DashboardLayout(props: PropsWithChildren) {
           },
         )}
       >
-        <div
-          className={
-            'flex items-center justify-center px-4 bg-white border-b h-16 border-b-gray-300'
-          }
-        >
-          <a href="/" className="">
-            <span className="sr-only">99Minutos</span>
-            <img className="h-8 w-auto" src="/logo.svg" alt="" />
-          </a>
-        </div>
-        <nav className="h-full pt-5 px-2 space-y-1 bg-white border-r border-r-gray-300">
-          {navigation.map((item) => (
-            <a
-              key={item.name}
-              href={item.href}
-              className={classnames(
-                `group flex items-center px-2 py-2 text-base font-medium rounded-md`,
-                {
-                  'bg-gray-200 text-secondary hover:bg-secondary hover:text-white': true,
-                },
-              )}
-            >
-              <item.icon
-                className={`
+        <div className="flex flex-col h-full">
+          <div
+            className={
+              'flex items-center justify-center px-4 bg-white border-b h-16 border-b-gray-300'
+            }
+          >
+            <a href="/" className="">
+              <span className="sr-only">99Minutos</span>
+              <img className="h-8 w-auto" src="/logo.svg" alt="" />
+            </a>
+          </div>
+          <nav className="grow pt-5 px-2 space-y-1 bg-white border-r border-r-gray-300">
+            {navigation.map((item) => (
+              <a
+                key={item.name}
+                href={item.href}
+                className={classnames(
+                  `group flex items-center px-2 py-2 text-base font-medium rounded-md`,
+                  {
+                    'bg-gray-200 text-secondary hover:bg-secondary hover:text-white': true,
+                  },
+                )}
+              >
+                <item.icon
+                  className={`
                 mr-4 flex-shrink-0 h-6 w-6
                 ${item.current ? 'text-white' : 'text-gray-400 group-hover:text-white'}
               `}
-              />
-              {item.name}
-            </a>
-          ))}
-        </nav>
+                />
+                {item.name}
+              </a>
+            ))}
+          </nav>
+        </div>
       </div>
 
       <div className="flex-1 flex flex-col">
@@ -86,13 +89,28 @@ export function DashboardLayout(props: PropsWithChildren) {
               <span className="sr-only">Open sidebar</span>
               <MenuIcon className="h-6 w-6" />
             </button>
-            <div className="flex items-center gap-x-12">
-              <div className="hidden lg:flex lg:gap-x-12">{/* Portal custom actions */}</div>
+            <div className="flex items-center gap-x-12" id="portal-actions">
+              {/* Portal custom actions */}
             </div>
             <div className="flex">
-              <Avatar.Root className="inline-flex items-center justify-center size-12 rounded-full border border-gray-200 bg-secondary text-white font-bold text-lg">
-                <Avatar.Fallback>{stringAvatar(user?.name || '')}</Avatar.Fallback>
-              </Avatar.Root>
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                  <Avatar.Root className="inline-flex items-center justify-center size-12 rounded-full border border-gray-200 bg-secondary text-white font-bold text-lg">
+                    <Avatar.Fallback>{stringAvatar(user?.name || '')}</Avatar.Fallback>
+                  </Avatar.Root>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content>
+                  <DropdownMenu.Item
+                    onClick={() =>
+                      logout({
+                        logoutParams: { returnTo: window.location.origin },
+                      })
+                    }
+                  >
+                    Cerrar sesión
+                  </DropdownMenu.Item>
+                </DropdownMenu.Content>
+              </DropdownMenu.Root>
             </div>
           </nav>
         </header>

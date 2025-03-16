@@ -49,3 +49,7 @@ Este template tiene la capacidad de usar componentes de Radix UI y Radix UI Them
 3. Ejecute el comando `pnpm install` para instalar las dependencias del proyecto
 4. Ejecute el comando `pnpm run prepare`, este comando solo debe ejecutarse una vez al clonar el repositorio, posteriormente no es necesario
 5. Ejecute el comando `pnpm run dev` para iniciar el servidor de desarrollo
+
+## src/components/custom-actions
+
+Este componente permite renderizar elementos en la barra de título junto al logotipo
