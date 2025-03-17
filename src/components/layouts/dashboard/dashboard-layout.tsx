@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { DropdownMenu } from '@radix-ui/themes';
+import { Button, DropdownMenu } from '@radix-ui/themes';
 import classnames from 'classnames';
 import { BoxIcon, ChartBarIcon, CogIcon, HomeIcon, MenuIcon } from 'lucide-react';
 import { Avatar } from 'radix-ui';
@@ -45,7 +45,7 @@ export function DashboardLayout(props: PropsWithChildren) {
         <div className="flex flex-col h-full">
           <div
             className={
-              'flex items-center justify-center px-4 bg-white border-b h-16 border-b-gray-300'
+              'flex-shrink-0 inline-flex items-center justify-center px-4 bg-white border-b h-16 border-b-gray-300'
             }
           >
             <a href="/" className="">
@@ -53,49 +53,52 @@ export function DashboardLayout(props: PropsWithChildren) {
               <img className="h-8 w-auto" src="/logo.svg" alt="" />
             </a>
           </div>
-          <nav className="grow pt-5 px-2 space-y-1 bg-white border-r border-r-gray-300">
-            {navigation.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className={classnames(
-                  `group flex items-center px-2 py-2 text-base font-medium rounded-md`,
-                  {
-                    'bg-gray-200 text-secondary hover:bg-secondary hover:text-white': true,
-                  },
-                )}
-              >
-                <item.icon
-                  className={`
+          <div className="flex-grow overflow-y-auto pt-5 px-2 space-y-1 bg-white border-r border-r-gray-300">
+            <nav className="space-y-1">
+              {navigation.map((item) => (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className={classnames(
+                    `group flex items-center px-2 py-2 text-base font-medium rounded-md`,
+                    {
+                      'bg-gray-200 text-secondary hover:bg-secondary hover:text-white': true,
+                    },
+                  )}
+                >
+                  <item.icon
+                    className={`
                 mr-4 flex-shrink-0 h-6 w-6
                 ${item.current ? 'text-white' : 'text-gray-400 group-hover:text-white'}
               `}
-                />
-                {item.name}
-              </a>
-            ))}
-          </nav>
+                  />
+                  {item.name}
+                </a>
+              ))}
+            </nav>
+          </div>
         </div>
       </div>
 
       <div className="flex-1 flex flex-col">
         <header className="g-white border-b h-16 border-b-gray-300">
-          <nav className="h-full flex items-center justify-between px-4" aria-label="Global">
-            <button
-              type="button"
-              className="lg:hidden -ml-0.5 -mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-md text-gray-500 hover:text-gray-900"
+          <div className="h-full flex items-center justify-between px-4" aria-label="Global">
+            <Button
+              radius="small"
+              variant="outline"
+              className="lg:!hidden inline-flex"
               onClick={() => setSidebarOpen(true)}
             >
               <span className="sr-only">Open sidebar</span>
-              <MenuIcon className="h-6 w-6" />
-            </button>
+              <MenuIcon />
+            </Button>
             <div className="flex items-center gap-x-12" id="portal-actions">
               {/* Portal custom actions */}
             </div>
             <div className="flex items-center gap-3">
-              {user?.name || ''}
+              <span className="select-none">{user?.name || ''}</span>
               <DropdownMenu.Root>
-                <DropdownMenu.Trigger>
+                <DropdownMenu.Trigger className="cursor-pointer">
                   <Avatar.Root className="inline-flex items-center justify-center size-12 rounded-full border border-gray-200 bg-secondary text-white font-bold text-lg">
                     <Avatar.Fallback>{stringAvatar(user?.name || '')}</Avatar.Fallback>
                   </Avatar.Root>
@@ -113,7 +116,7 @@ export function DashboardLayout(props: PropsWithChildren) {
                 </DropdownMenu.Content>
               </DropdownMenu.Root>
             </div>
-          </nav>
+          </div>
         </header>
         <main className="flex-1 p-4">{props.children}</main>
       </div>

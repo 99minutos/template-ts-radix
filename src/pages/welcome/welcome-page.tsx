@@ -1,7 +1,5 @@
 import { Box, Button, TextField } from '@radix-ui/themes';
 
-import CustomActions from '@/components/custom-actions';
-
 export default function WelcomePage() {
   return (
     <Box className="py-4">
@@ -10,9 +8,6 @@ export default function WelcomePage() {
           <Button size="2">Send</Button>
         </TextField.Slot>
       </TextField.Root>
-      <CustomActions>
-        <Button size="2">Send</Button>
-      </CustomActions>
     </Box>
   );
 }
