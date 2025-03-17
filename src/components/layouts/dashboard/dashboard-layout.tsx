@@ -92,7 +92,8 @@ export function DashboardLayout(props: PropsWithChildren) {
             <div className="flex items-center gap-x-12" id="portal-actions">
               {/* Portal custom actions */}
             </div>
-            <div className="flex">
+            <div className="flex items-center gap-3">
+              {user?.name || ''}
               <DropdownMenu.Root>
                 <DropdownMenu.Trigger>
                   <Avatar.Root className="inline-flex items-center justify-center size-12 rounded-full border border-gray-200 bg-secondary text-white font-bold text-lg">
