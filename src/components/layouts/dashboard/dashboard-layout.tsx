@@ -118,7 +118,7 @@ export function DashboardLayout(props: PropsWithChildren) {
             </div>
           </div>
         </header>
-        <main className="flex-1 p-4">{props.children}</main>
+        <main className="flex-1">{props.children}</main>
       </div>
     </div>
   );
