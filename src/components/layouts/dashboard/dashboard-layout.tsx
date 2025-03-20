@@ -3,7 +3,7 @@ import { DropdownMenu } from '@radix-ui/themes';
 import classnames from 'classnames';
 import { ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, HomeIcon } from 'lucide-react';
 import { Avatar } from 'radix-ui';
-import { PropsWithChildren, useState } from 'react';
+import { PropsWithChildren, useCallback, useEffect, useState } from 'react';
 
 import { stringAvatar } from '@/utils/strings';
 
@@ -18,10 +18,18 @@ export function DashboardLayout(props: PropsWithChildren) {
   const { user, logout } = useAuth0();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
-
-  // Example navigation items - replace with your actual items
   const navigation: SidebarItem[] = [{ name: 'Inicio', href: '/', icon: HomeIcon }];
+
+  const onToggleSidebar = useCallback(() => {
+    setSidebarOpen(!sidebarOpen);
+    localStorage.setItem('sidebarOpen', JSON.stringify(!sidebarOpen));
+  }, [sidebarOpen]);
+
+  useEffect(() => {
+    const storedState = localStorage.getItem('sidebarOpen');
+    console.log(storedState);
+    setSidebarOpen(JSON.parse(storedState || 'true'));
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -79,7 +87,7 @@ export function DashboardLayout(props: PropsWithChildren) {
                 <div className="text-right py-2">
                   <button
                     className="p-1 cursor-pointer text-secondary hover:bg-secondary hover:text-white rounded-md"
-                    onClick={toggleSidebar}
+                    onClick={onToggleSidebar}
                     aria-label={sidebarOpen ? 'Cerrar menú lateral' : 'Abrir menú lateral'}
                   >
                     <ChevronsLeftIcon className="h-6 w-6" aria-hidden="true" />
@@ -123,7 +131,7 @@ export function DashboardLayout(props: PropsWithChildren) {
                 '-translate-x-full': sidebarOpen,
               },
             )}
-            onClick={toggleSidebar}
+            onClick={onToggleSidebar}
           >
             {sidebarOpen ? (
               <ChevronLeftIcon className="h-6 w-6" aria-hidden="true" />
