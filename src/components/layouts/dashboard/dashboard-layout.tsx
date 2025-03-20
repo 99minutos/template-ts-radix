@@ -1,7 +1,7 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { DropdownMenu } from '@radix-ui/themes';
 import classnames from 'classnames';
-import { ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, HomeIcon } from 'lucide-react';
+import { ChevronsLeftIcon, ChevronsRightIcon, HomeIcon } from 'lucide-react';
 import { Avatar } from 'radix-ui';
 import { PropsWithChildren, useCallback, useEffect, useState } from 'react';
 
@@ -90,7 +90,7 @@ export function DashboardLayout(props: PropsWithChildren) {
                     onClick={onToggleSidebar}
                     aria-label={sidebarOpen ? 'Cerrar menú lateral' : 'Abrir menú lateral'}
                   >
-                    <ChevronsLeftIcon className="h-6 w-6" aria-hidden="true" />
+                    <ChevronsLeftIcon className="h-4 w-4" aria-hidden="true" />
                   </button>
                 </div>
                 {navigation.map((item) => (
@@ -125,19 +125,14 @@ export function DashboardLayout(props: PropsWithChildren) {
         >
           <button
             className={classnames(
-              'z-10 bg-secondary text-white absolute -left-1 top-2 py-3 px-1 h-auto w-auto border rounded-tr-md rounded-br-md border-secondary transform transition-transform duration-300 ease-in-out',
+              'z-10 bg-secondary text-white absolute left-1 top-2 py-1 px-1 h-auto w-auto border rounded-md border-secondary transform transition-transform duration-300 ease-in-out',
               {
-                'translate-x-0': !sidebarOpen,
-                '-translate-x-full': sidebarOpen,
+                hidden: sidebarOpen,
               },
             )}
             onClick={onToggleSidebar}
           >
-            {sidebarOpen ? (
-              <ChevronLeftIcon className="h-6 w-6" aria-hidden="true" />
-            ) : (
-              <ChevronRightIcon className="h-6 w-6" aria-hidden="true" />
-            )}
+            <ChevronsRightIcon className="h-4 w-4" aria-hidden="true" />
           </button>
           {props.children}
         </main>
