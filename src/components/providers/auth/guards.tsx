@@ -18,7 +18,7 @@ export const AuthRequired = (props: PropsWithChildren) => {
     }
   }, [isAuthenticated, error, isLoading, loginWithRedirect]);
 
-  if (isLoading) {
+  if (isLoading || (!isAuthenticated && !isLoading && !error)) {
     return <LoadingPage />;
   }
 
