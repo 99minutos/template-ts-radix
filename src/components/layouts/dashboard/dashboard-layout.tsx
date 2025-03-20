@@ -1,7 +1,7 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { DropdownMenu } from '@radix-ui/themes';
 import classnames from 'classnames';
-import { ChevronLeftIcon, ChevronRightIcon, HomeIcon, MenuIcon, XIcon } from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, HomeIcon } from 'lucide-react';
 import { Avatar } from 'radix-ui';
 import { PropsWithChildren, useState } from 'react';
 
@@ -30,18 +30,6 @@ export function DashboardLayout(props: PropsWithChildren) {
       <header className="w-full g-white border-b h-16 border-b-secondaryborder-secondary">
         <div className="h-full flex items-center justify-between px-4" aria-label="Global">
           <div className="flex items-center">
-            <button
-              type="button"
-              className="hidden mr-3 p-2 text-gray-500 rounded-md hover:bg-gray-100 focus:outline-none"
-              onClick={toggleSidebar}
-              aria-label={sidebarOpen ? 'Cerrar menú lateral' : 'Abrir menú lateral'}
-            >
-              {sidebarOpen ? (
-                <XIcon className="h-6 w-6" aria-hidden="true" />
-              ) : (
-                <MenuIcon className="h-6 w-6" aria-hidden="true" />
-              )}
-            </button>
             <div className={'flex-shrink-0 inline-flex items-center justify-center'}>
               <a href="/" className="">
                 <span className="sr-only">99Minutos</span>
@@ -86,8 +74,17 @@ export function DashboardLayout(props: PropsWithChildren) {
           )}
         >
           <div className="flex flex-col h-full">
-            <div className="flex-grow overflow-y-auto pt-5 px-2 space-y-1 bg-white border-r border-r-secondaryborder-secondary">
-              <nav className="space-y-1">
+            <div className="flex-grow overflow-y-auto px-2 space-y-1 bg-white border-r border-r-secondaryborder-secondary">
+              <nav className="space-y-1 relative">
+                <div className="text-right py-2">
+                  <button
+                    className="p-1 cursor-pointer text-secondary hover:bg-secondary hover:text-white rounded-md"
+                    onClick={toggleSidebar}
+                    aria-label={sidebarOpen ? 'Cerrar menú lateral' : 'Abrir menú lateral'}
+                  >
+                    <ChevronsLeftIcon className="h-6 w-6" aria-hidden="true" />
+                  </button>
+                </div>
                 {navigation.map((item) => (
                   <a
                     key={item.name}
@@ -119,7 +116,13 @@ export function DashboardLayout(props: PropsWithChildren) {
           })}
         >
           <button
-            className="z-10 bg-secondary text-white absolute -left-1 top-2 py-3 px-2 h-auto w-auto border rounded-tr-md rounded-br-md  border-secondary"
+            className={classnames(
+              'z-10 bg-secondary text-white absolute -left-1 top-2 py-3 px-2 h-auto w-auto border rounded-tr-md rounded-br-md border-secondary transform transition-transform duration-300 ease-in-out',
+              {
+                'translate-x-0': !sidebarOpen,
+                '-translate-x-full': sidebarOpen,
+              },
+            )}
             onClick={toggleSidebar}
           >
             {sidebarOpen ? (
