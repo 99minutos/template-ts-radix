@@ -16,7 +16,7 @@ interface SidebarItem {
 
 export function DashboardLayout(props: PropsWithChildren) {
   const { user, logout } = useAuth0();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const navigation: SidebarItem[] = [{ name: 'Inicio', href: '/', icon: HomeIcon }];
 
@@ -125,7 +125,7 @@ export function DashboardLayout(props: PropsWithChildren) {
         >
           <button
             className={classnames(
-              'z-10 bg-secondary text-white absolute -left-1 top-2 py-3 px-2 h-auto w-auto border rounded-tr-md rounded-br-md border-secondary transform transition-transform duration-300 ease-in-out',
+              'z-10 bg-secondary text-white absolute -left-1 top-2 py-3 px-1 h-auto w-auto border rounded-tr-md rounded-br-md border-secondary transform transition-transform duration-300 ease-in-out',
               {
                 'translate-x-0': !sidebarOpen,
                 '-translate-x-full': sidebarOpen,
