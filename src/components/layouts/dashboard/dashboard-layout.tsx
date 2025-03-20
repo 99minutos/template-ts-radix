@@ -1,7 +1,7 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { Button, DropdownMenu } from '@radix-ui/themes';
+import { DropdownMenu } from '@radix-ui/themes';
 import classnames from 'classnames';
-import { BoxIcon, ChartBarIcon, CogIcon, HomeIcon, MenuIcon } from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon, HomeIcon, MenuIcon, XIcon } from 'lucide-react';
 import { Avatar } from 'radix-ui';
 import { PropsWithChildren, useState } from 'react';
 
@@ -18,107 +18,118 @@ export function DashboardLayout(props: PropsWithChildren) {
   const { user, logout } = useAuth0();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+
   // Example navigation items - replace with your actual items
-  const navigation: SidebarItem[] = [
-    { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
-    { name: 'Orders', href: '/orders', icon: BoxIcon },
-    { name: 'Analytics', href: '/analytics', icon: ChartBarIcon },
-    { name: 'Settings', href: '/settings', icon: CogIcon },
-  ];
+  const navigation: SidebarItem[] = [{ name: 'Inicio', href: '/', icon: HomeIcon }];
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex flex-col">
       {/* Mobile sidebar overlay */}
-      {sidebarOpen && (
-        <div className="fixed inset-0 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />
-      )}
 
-      <div
-        className={classnames(
-          `fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-auto lg:z-auto`,
-          {
-            'translate-x-0': sidebarOpen,
-            '-translate-x-full': !sidebarOpen,
-          },
-        )}
-      >
-        <div className="flex flex-col h-full">
-          <div
-            className={
-              'flex-shrink-0 inline-flex items-center justify-center px-4 bg-white border-b h-16 border-b-gray-300'
-            }
-          >
-            <a href="/" className="">
-              <span className="sr-only">99Minutos</span>
-              <img className="h-8 w-auto" src="/logo.svg" alt="" />
-            </a>
+      <header className="w-full g-white border-b h-16 border-b-secondaryborder-secondary">
+        <div className="h-full flex items-center justify-between px-4" aria-label="Global">
+          <div className="flex items-center">
+            <button
+              type="button"
+              className="hidden mr-3 p-2 text-gray-500 rounded-md hover:bg-gray-100 focus:outline-none"
+              onClick={toggleSidebar}
+              aria-label={sidebarOpen ? 'Cerrar menú lateral' : 'Abrir menú lateral'}
+            >
+              {sidebarOpen ? (
+                <XIcon className="h-6 w-6" aria-hidden="true" />
+              ) : (
+                <MenuIcon className="h-6 w-6" aria-hidden="true" />
+              )}
+            </button>
+            <div className={'flex-shrink-0 inline-flex items-center justify-center'}>
+              <a href="/" className="">
+                <span className="sr-only">99Minutos</span>
+                <img className="h-8 w-auto" src="/logo.svg" alt="" />
+              </a>
+            </div>
           </div>
-          <div className="flex-grow overflow-y-auto pt-5 px-2 space-y-1 bg-white border-r border-r-gray-300">
-            <nav className="space-y-1">
-              {navigation.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className={classnames(
-                    `group flex items-center px-2 py-2 text-base font-medium rounded-md`,
-                    {
-                      'bg-gray-200 text-secondary hover:bg-secondary hover:text-white': true,
-                    },
-                  )}
+          <div className="flex items-center gap-x-12" id="portal-actions">
+            {/* Portal custom actions */}
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="select-none">{user?.name || ''}</span>
+            <DropdownMenu.Root>
+              <DropdownMenu.Trigger className="cursor-pointer">
+                <Avatar.Root className="inline-flex items-center justify-center size-12 rounded-full border border-gray-200 bg-secondary text-white font-bold text-lg">
+                  <Avatar.Fallback>{stringAvatar(user?.name || '')}</Avatar.Fallback>
+                </Avatar.Root>
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Content>
+                <DropdownMenu.Item
+                  onClick={() =>
+                    logout({
+                      logoutParams: { returnTo: window.location.origin },
+                    })
+                  }
                 >
-                  <item.icon
-                    className={`
-                mr-4 flex-shrink-0 h-6 w-6
-                ${item.current ? 'text-white' : 'text-gray-400 group-hover:text-white'}
-              `}
-                  />
-                  {item.name}
-                </a>
-              ))}
-            </nav>
+                  Cerrar sesión
+                </DropdownMenu.Item>
+              </DropdownMenu.Content>
+            </DropdownMenu.Root>
           </div>
         </div>
-      </div>
-
-      <div className="flex-1 flex flex-col">
-        <header className="g-white border-b h-16 border-b-gray-300">
-          <div className="h-full flex items-center justify-between px-4" aria-label="Global">
-            <Button
-              radius="small"
-              variant="outline"
-              className="lg:!hidden inline-flex"
-              onClick={() => setSidebarOpen(true)}
-            >
-              <span className="sr-only">Open sidebar</span>
-              <MenuIcon />
-            </Button>
-            <div className="flex items-center gap-x-12" id="portal-actions">
-              {/* Portal custom actions */}
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="select-none">{user?.name || ''}</span>
-              <DropdownMenu.Root>
-                <DropdownMenu.Trigger className="cursor-pointer">
-                  <Avatar.Root className="inline-flex items-center justify-center size-12 rounded-full border border-gray-200 bg-secondary text-white font-bold text-lg">
-                    <Avatar.Fallback>{stringAvatar(user?.name || '')}</Avatar.Fallback>
-                  </Avatar.Root>
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Content>
-                  <DropdownMenu.Item
-                    onClick={() =>
-                      logout({
-                        logoutParams: { returnTo: window.location.origin },
-                      })
-                    }
+      </header>
+      <div className="flex flex-grow">
+        <div
+          className={classnames(
+            `fixed h-full left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out`,
+            {
+              'translate-x-0': sidebarOpen,
+              '-translate-x-full': !sidebarOpen,
+            },
+          )}
+        >
+          <div className="flex flex-col h-full">
+            <div className="flex-grow overflow-y-auto pt-5 px-2 space-y-1 bg-white border-r border-r-secondaryborder-secondary">
+              <nav className="space-y-1">
+                {navigation.map((item) => (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    className={classnames(
+                      `group flex items-center px-2 py-2 text-base font-medium rounded-md`,
+                      {
+                        'bg-gray-200 text-secondary hover:bg-secondary hover:text-white': true,
+                      },
+                    )}
                   >
-                    Cerrar sesión
-                  </DropdownMenu.Item>
-                </DropdownMenu.Content>
-              </DropdownMenu.Root>
+                    <item.icon
+                      className={`
+                    mr-4 flex-shrink-0 h-6 w-6
+                    ${item.current ? 'text-white' : 'text-gray-400 group-hover:text-white'}
+                  `}
+                    />
+                    {item.name}
+                  </a>
+                ))}
+              </nav>
             </div>
           </div>
-        </header>
-        <main className="flex-1">{props.children}</main>
+        </div>
+        <main
+          className={classnames('relative flex-1 transition-all duration-300', {
+            'ml-0': !sidebarOpen,
+            'ml-64': sidebarOpen,
+          })}
+        >
+          <button
+            className="z-10 bg-secondary text-white absolute -left-1 top-2 py-3 px-2 h-auto w-auto border rounded-tr-md rounded-br-md  border-secondary"
+            onClick={toggleSidebar}
+          >
+            {sidebarOpen ? (
+              <ChevronLeftIcon className="h-6 w-6" aria-hidden="true" />
+            ) : (
+              <ChevronRightIcon className="h-6 w-6" aria-hidden="true" />
+            )}
+          </button>
+          {props.children}
+        </main>
       </div>
     </div>
   );
