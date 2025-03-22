@@ -1,7 +1,7 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { DropdownMenu } from '@radix-ui/themes';
+import { DropdownMenu, IconButton } from '@radix-ui/themes';
 import classnames from 'classnames';
-import { ChevronsLeftIcon, ChevronsRightIcon, HomeIcon } from 'lucide-react';
+import { HomeIcon, PanelLeftCloseIcon, PanelLeftOpenIcon } from 'lucide-react';
 import { Avatar } from 'radix-ui';
 import { PropsWithChildren, useCallback, useEffect, useState } from 'react';
 
@@ -38,7 +38,10 @@ export function DashboardLayout(props: PropsWithChildren) {
         <div className="h-full flex items-center justify-between px-4" aria-label="Global">
           <div className="flex items-center">
             <div className={'flex-shrink-0 inline-flex items-center justify-center'}>
-              <a href="/" className="">
+              <IconButton variant="ghost" onClick={onToggleSidebar}>
+                {sidebarOpen ? <PanelLeftCloseIcon /> : <PanelLeftOpenIcon />}
+              </IconButton>
+              <a href="/" className="ml-3">
                 <span className="sr-only">99Minutos</span>
                 <img className="h-8 w-auto" src="/logo.svg" alt="" />
               </a>
@@ -82,16 +85,7 @@ export function DashboardLayout(props: PropsWithChildren) {
         >
           <div className="flex flex-col h-full">
             <div className="flex-grow overflow-y-auto px-2 space-y-1 bg-white border-r border-r-secondaryborder-secondary">
-              <nav className="space-y-1 relative">
-                <div className="text-right py-2">
-                  <button
-                    className="p-1 cursor-pointer text-secondary hover:bg-secondary hover:text-white rounded-md"
-                    onClick={onToggleSidebar}
-                    aria-label={sidebarOpen ? 'Cerrar menú lateral' : 'Abrir menú lateral'}
-                  >
-                    <ChevronsLeftIcon className="h-4 w-4" aria-hidden="true" />
-                  </button>
-                </div>
+              <nav className="space-y-1 pt-2 relative">
                 {navigation.map((item) => (
                   <a
                     key={item.name}
@@ -122,17 +116,6 @@ export function DashboardLayout(props: PropsWithChildren) {
             'ml-64': sidebarOpen,
           })}
         >
-          <button
-            className={classnames(
-              'z-10 bg-secondary text-white absolute left-1 top-2 py-1 px-1 h-auto w-auto border rounded-md border-secondary transform transition-transform duration-300 ease-in-out',
-              {
-                hidden: sidebarOpen,
-              },
-            )}
-            onClick={onToggleSidebar}
-          >
-            <ChevronsRightIcon className="h-4 w-4" aria-hidden="true" />
-          </button>
           {props.children}
         </main>
       </div>
