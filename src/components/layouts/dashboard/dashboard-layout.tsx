@@ -27,7 +27,6 @@ export function DashboardLayout(props: PropsWithChildren) {
 
   useEffect(() => {
     const storedState = localStorage.getItem('sidebarOpen');
-    console.log(storedState);
     setSidebarOpen(JSON.parse(storedState || 'true'));
   }, []);
 
