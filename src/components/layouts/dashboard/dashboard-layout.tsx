@@ -112,7 +112,7 @@ export function DashboardLayout(props: PropsWithChildren) {
         </div>
         <main
           className={classnames(
-            'relative flex-1 transition-all duration-300 overflow-y-auto h-screen',
+            'relative flex-1 transition-all duration-300 h-[calc(100vh-4rem)]',
             {
               'ml-0': !sidebarOpen,
               'ml-64': sidebarOpen,
