@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { DropdownMenu, IconButton } from '@radix-ui/themes';
+import { DropdownMenu, IconButton, ScrollArea } from '@radix-ui/themes';
 import classnames from 'classnames';
 import { HomeIcon, PanelLeftCloseIcon, PanelLeftOpenIcon } from 'lucide-react';
 import { Avatar } from 'radix-ui';
@@ -111,12 +111,15 @@ export function DashboardLayout(props: PropsWithChildren) {
           </div>
         </div>
         <main
-          className={classnames('relative flex-1 transition-all duration-300', {
-            'ml-0': !sidebarOpen,
-            'ml-64': sidebarOpen,
-          })}
+          className={classnames(
+            'relative flex-1 transition-all duration-300 overflow-y-auto h-screen',
+            {
+              'ml-0': !sidebarOpen,
+              'ml-64': sidebarOpen,
+            },
+          )}
         >
-          {props.children}
+          <ScrollArea className="h-full w-full">{props.children}</ScrollArea>
         </main>
       </div>
     </div>
