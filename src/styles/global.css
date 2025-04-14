@@ -12,6 +12,7 @@
   --strong-font-family: 'Barlow', 'Roboto', sans-serif;
   --em-font-family: 'Barlow', 'Roboto', sans-serif;
   --quote-font-family: 'Barlow', 'Roboto', sans-serif;
+  --cursor-button: pointer;
 }
 
 :root,
@@ -160,4 +161,9 @@
       --gray-track: oklch(64.6% 0.0817 240.4);
     }
   }
+}
+
+.currency-field input {
+  text-align: right;
+  padding-right: 1em;
 }
