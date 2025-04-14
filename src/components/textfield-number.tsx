@@ -1,27 +1,38 @@
 import { TextField } from '@radix-ui/themes';
 import { ChangeEvent, forwardRef, useMemo, useState } from 'react';
 
-const numberFormatter = Intl.NumberFormat('es-MX', {
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-});
+export enum DataType {
+  INT = 'int',
+  FLOAT = 'float',
+}
 
-// Definir explícitamente los tipos de propiedades aceptados por TextField.Root
-type TextFieldRootProps = React.ComponentPropsWithoutRef<typeof TextField.Root>;
+type TextFieldRootProps = React.ComponentPropsWithoutRef<typeof TextField.Root> & {
+  datatype?: DataType;
+};
 
-const TextFieldNumber = forwardRef<HTMLInputElement, TextFieldRootProps>((props) => {
+const TextFieldNumber = forwardRef<HTMLInputElement, TextFieldRootProps>((props, ref) => {
+  const { datatype = DataType.FLOAT } = props;
   const [value, setValue] = useState(props.value || 0);
+
+  const numberFormatter = useMemo(
+    () =>
+      Intl.NumberFormat('es-MX', {
+        minimumFractionDigits: datatype === DataType.INT ? 0 : 2,
+        maximumFractionDigits: datatype === DataType.INT ? 0 : 2,
+      }),
+    [datatype],
+  );
 
   function handleChange(
     realChangeFn: React.ChangeEventHandler<HTMLInputElement> | undefined,
     formattedValue: string,
   ) {
     const digits = formattedValue.replace(/\D/g, '');
-    const realValue = Number(digits) / 100;
+    const divisor = datatype === DataType.INT ? 1 : 100;
+    const realValue = Number(digits) / divisor;
     setValue(realValue);
 
     if (realChangeFn) {
-      // Crear un evento sintético para evitar el error de tipo
       const syntheticEvent = {
         target: { value: realValue },
       } as unknown as ChangeEvent<HTMLInputElement>;
@@ -32,20 +43,19 @@ const TextFieldNumber = forwardRef<HTMLInputElement, TextFieldRootProps>((props)
 
   const formattedValue = useMemo(() => {
     return numberFormatter.format(Number(value));
-  }, [value]);
+  }, [value, numberFormatter]);
 
-  // Separar las propiedades válidas para TextField.Root
-  // Omitir propiedades específicas de input HTML que no son compatibles
   const { onChange, children, className, ...textFieldProps } = props;
 
   return (
     <TextField.Root
       {...textFieldProps}
+      ref={ref}
       value={formattedValue}
       onChange={(ev: ChangeEvent<HTMLInputElement>) => {
         handleChange(onChange, ev.target.value);
       }}
-      className={`currency-field ${className}`}
+      className={`currency-field ${className || ''}`}
     >
       {children}
     </TextField.Root>
