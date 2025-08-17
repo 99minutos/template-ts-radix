@@ -21,7 +21,7 @@ export default function AuthProvider(props: PropsWithChildren) {
         prompt: 'login',
         redirect_uri: `${window.location.origin}`,
         audience: `https://${VITE_AUTH0_DOMAIN}`,
-        scope: 'openid profile email',
+        scope: 'openid profile email offline_access',
       }}
       cacheLocation="localstorage"
     >
