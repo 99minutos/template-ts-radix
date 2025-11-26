@@ -1,0 +1,51 @@
+steps:
+  # Build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - '$_GCR_HOSTNAME/$PROJECT_ID/artifacts/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
+      - '--build-arg=VITE_AUTH0_DOMAIN=$_VITE_AUTH0_DOMAIN'
+      - '--build-arg=VITE_AUTH0_AUDIENCE=$_VITE_AUTH0_AUDIENCE'
+      - '--build-arg=VITE_AUTH0_CLIENT_ID=$_VITE_AUTH0_CLIENT_ID'
+      - '--build-arg=VITE_URL_SERVICE=$_VITE_URL_SERVICE'
+      - '-f'
+      - 'build/Dockerfile'
+      - '.'
+    id: Build
+
+  # Push the container image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - '$_GCR_HOSTNAME/$PROJECT_ID/artifacts/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
+    id: Push
+
+  # Deploy container image to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - '$_SERVICE_NAME'
+      - '--image=$_GCR_HOSTNAME/$PROJECT_ID/artifacts/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
+      - "--service-account=$SERVICE_ACCOUNT_EMAIL"
+      - "--cpu-boost"
+      - '--region=$_DEPLOY_REGION'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--port=8080'
+      - '--timeout=300'
+    id: Deploy
+    waitFor:
+      - Push
+
+substitutions:
+  _GCR_HOSTNAME: us-docker.pkg.dev
+  _DEPLOY_REGION: us-central1
+
+options:
+  substitutionOption: ALLOW_LOOSE
+  logging: CLOUD_LOGGING_ONLY
+
+timeout: 600s
