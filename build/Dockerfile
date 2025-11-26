@@ -1,7 +1,7 @@
 FROM node:24-alpine as build
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN apk add --no-cache python3 make g++ && corepack enable && corepack prepare pnpm --activate
+RUN apk add --no-cache python3 make g++ && corepack enable && corepack prepare pnpm@10 --activate
 
 # BEGIN: Set environment variables for the build
 ARG VITE_AUTH0_DOMAIN
