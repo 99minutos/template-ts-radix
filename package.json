@@ -29,7 +29,7 @@
     "lodash": "^4.17.21",
     "lucide-react": "^0.482.0",
     "radix-ui": "^1.4.2",
-    "react": "^19.1.0",
+    "react": "^19.2.1",
     "react-dom": "^19.1.0",
     "react-dropzone": "^14.3.8",
     "react-router-dom": "^7.6.3",
